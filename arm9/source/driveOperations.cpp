@@ -1,6 +1,6 @@
 #include <nds.h>
 #include <nds/arm9/dldi.h>
-#include <fat.h>
+#include <slim.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
 #include <stdio.h>
@@ -135,7 +135,7 @@ bool imgFound(void) {
 }
 
 TWL_CODE bool nandMount(void) {
-	fatMountSimple("nand", &io_dsi_nand);
+	fatMountSimple("nand:/", &io_dsi_nand);
 	if (nandFound()) {
 		struct statvfs st;
 		if (statvfs("nand:/", &st) == 0) {
@@ -155,7 +155,7 @@ TWL_CODE void nandUnmount(void) {
 bool sdMount(void) {
 	extern const DISC_INTERFACE __my_io_dsisd;
 
-	fatMountSimple("sd", &__my_io_dsisd);
+	fatMountSimple("sd:/", &__my_io_dsisd);
 	if (sdFound()) {
 		sdMountedDone = true;
 		fatGetVolumeLabel("sd", sdLabel);
@@ -275,25 +275,25 @@ TWL_CODE bool twl_flashcardMount(void) {
 		// Read a DLDI driver specific to the cart
 		if (!memcmp(gameid, "ASMA", 4)) {
 			io_dldi_data = dldiLoadFromBin(r4tf_dldi);
-			fatMountSimple("fat", dldiGetInternal());      
+			fatMountSimple("fat:/", dldiGetInternal());      
 		} else if (!memcmp(gamename, "TOP TF/SD DS", 12) || !memcmp(gameid, "A76E", 4)) {
 			io_dldi_data = dldiLoadFromBin(tt_sd_dldi);
-			fatMountSimple("fat", dldiGetInternal());
+			fatMountSimple("fat:/", dldiGetInternal());
  		} else /*if (!memcmp(gamename, "PASS", 4) && !memcmp(gameid, "ASME", 4)) {
 			io_dldi_data = dldiLoadFromBin(CycloEvo_dldi);
 			fatMountSimple("fat", dldiGetInternal());
 		} else*/ if (!memcmp(gamename, "D!S!XTREME", 10) && !memcmp(gameid, "AYIE", 4)) {
 			io_dldi_data = dldiLoadFromBin(dsx_dldi);
-			fatMountSimple("fat", dldiGetInternal()); 
+			fatMountSimple("fat:/", dldiGetInternal()); 
         } else if (!memcmp(gamename, "QMATETRIAL", 9) || !memcmp(gamename, "R4DSULTRA", 9)) {
 			io_dldi_data = dldiLoadFromBin(r4idsn_sd_dldi);
-			fatMountSimple("fat", dldiGetInternal());
+			fatMountSimple("fat:/", dldiGetInternal());
 		} else if (!memcmp(gameid, "ACEK", 4) || !memcmp(gameid, "YCEP", 4) || !memcmp(gameid, "AHZH", 4) || !memcmp(gameid, "CHPJ", 4) || !memcmp(gameid, "ADLP", 4)) {
 			io_dldi_data = dldiLoadFromBin(ak2_sd_dldi);
-			fatMountSimple("fat", dldiGetInternal());
+			fatMountSimple("fat:/", dldiGetInternal());
 		} /*else if (!memcmp(gameid, "ALXX", 4)) {
 			io_dldi_data = dldiLoadFromBin(dstwo_dldi);
-			fatMountSimple("fat", dldiGetInternal());
+			fatMountSimple("fat:/", dldiGetInternal());
 		}*/
 
 		if (flashcardFound()) {
@@ -336,13 +336,13 @@ void flashcardUnmount(void) {
 
 TWL_CODE void ramdrive1Mount(void) {
 	LZ77_Decompress((u8*)__9MB_lz77, (u8*)0x02500000);
-	fatMountSimple("ram1", &io_ram_drive);
+	fatMountSimple("ram1:/", &io_ram_drive);
 	ramdrive1Mounted = (access("ram1:/", F_OK) == 0);
 }
 
 TWL_CODE void ramdrive2Mount(void) {
 	LZ77_Decompress((u8*)__16MB_lz77, (u8*)0x0D000000);
-	fatMountSimple("ram2", &io_ram_drive2);
+	fatMountSimple("ram2:/", &io_ram_drive2);
 	ramdrive2Mounted = (access("ram2:/", F_OK) == 0);
 }
 
@@ -355,7 +355,7 @@ bool imgMount(const char* imgName) {
 	extern const char* currentImgName;
 
 	currentImgName = imgName;
-	fatMountSimple("img", &io_img);
+	fatMountSimple("img:/", &io_img);
 	if (imgFound()) {
 		fatGetVolumeLabel("img", imgLabel);
 		fixLabel(&imgLabel[0]);

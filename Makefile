@@ -119,7 +119,7 @@ export GAME_TITLE := $(TARGET)
 
 .PHONY: bootloader bootstub clean arm7/$(TARGET).elf arm9/$(TARGET).elf
 
-all:	bootloader bootstub $(TARGET).nds
+all:	libslim bootloader bootstub $(TARGET).nds
 	
 dist:	all
 	@rm	-fr	hbmenu
@@ -172,6 +172,9 @@ bootloader: data
 	
 bootstub: data
 	@$(MAKE) -C bootstub
+
+libslim:
+	$(MAKE) -C libslim/libslim
 
 #---------------------------------------------------------------------------------
 else

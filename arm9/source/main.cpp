@@ -22,7 +22,7 @@
 #include <nds.h>
 #include <nds/arm9/dldi.h>
 #include <stdio.h>
-#include <fat.h>
+#include <slim.h>
 #include <sys/stat.h>
 #include <limits.h>
 
