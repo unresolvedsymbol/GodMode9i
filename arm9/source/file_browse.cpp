@@ -745,14 +745,17 @@ std::string browseForFile (void) {
 			}
 		}
 
-		// Delete file/folder
+		// Delete action
 		if ((pressed & KEY_X) && (entry->name != ".." && strncmp(path, "nitro:/", 7) != 0)) {
 			consoleSelect(&bottomConsole);
 			consoleClear();
 			printf ("\x1B[47m");		// Print foreground white color
-			if (clipboardOn)
-				iprintf("Delete %d files?\n", clipboard.size());
-			else
+			if (clipboardOn) {
+				iprintf("Delete %d %s listed?\n", clipboard.size(), clipboard.size() > 1 ? "files" : "file");
+				for (const auto &file : clipboard)
+					iprintf("\x1B[41m- %s\n", file.name.c_str());
+				iprintf("\x1B[47m");
+			} else
 				iprintf("Delete \"%s\"?\n", entry->name.c_str());
 			printf ("(<A> yes, <B> no)");
 			consoleSelect(&topConsole);

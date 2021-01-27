@@ -14,7 +14,7 @@ u32 copyBuf[copyBufSize];
 
 extern PrintConsole topConsole, bottomConsole;
 
-std::vector<ClipboardFile> clipboard;
+std::vector<Selection> clipboard;
 bool clipboardOn = false;
 bool clipboardUsed = false;
 

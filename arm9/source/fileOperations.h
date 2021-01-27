@@ -5,17 +5,17 @@
 #ifndef FILE_COPY
 #define FILE_COPY
 
-struct ClipboardFile {
+struct Selection {
 	std::string path;
 	std::string name;
 	bool folder;
 	int drive; // 0 == SD card, 1 == Flashcard, 2 == RAMdrive 1, 3 == RAMdrive 2
 	bool nitro;
 
-	ClipboardFile(std::string path, std::string name, bool folder, int drive, bool nitro) : path(std::move(path)), name(std::move(name)), folder(folder), drive(drive), nitro(nitro) {}
+	Selection(std::string path, std::string name, bool folder, int drive, bool nitro) : path(std::move(path)), name(std::move(name)), folder(folder), drive(drive), nitro(nitro) {}
 };
 
-extern std::vector<ClipboardFile> clipboard;
+extern std::vector<Selection> clipboard;
 extern bool clipboardOn;
 extern bool clipboardUsed;
 
